@@ -31,7 +31,7 @@ class FireRedAsrConfig:
         temperature=1.0,
         use_half=False
     ):
-        self.use_gpu = (use_gpu,)
+        self.use_gpu = use_gpu
         self.beam_size = beam_size
         self.nbest = nbest
         self.decode_max_len = decode_max_len
