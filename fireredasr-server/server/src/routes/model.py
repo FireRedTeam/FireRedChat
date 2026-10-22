@@ -1,7 +1,10 @@
 import os
 import sys
 import re
+import tempfile
 from collections import OrderedDict
+
+import soundfile as sf
 
 # Add FireRedASR to Python path
 sys.path.append(os.getenv('FIREREDASR_PATH'))
@@ -66,7 +69,10 @@ async def transcribe_audio(
         model, post_model = get_model()
         
         # Perform transcription
-        outputs = model.transcribe(["test_audio"], [(16000, audio)])
+        with tempfile.TemporaryDirectory() as audio_dir:
+            wav_path = os.path.join(audio_dir, "audio.wav")
+            sf.write(wav_path, audio, 16000, subtype="PCM_16")
+            outputs = model.transcribe(["test_audio"], [wav_path])
 
         asr_results = OrderedDict({r["uttid"] : r for r in outputs})
 
